@@ -29,7 +29,7 @@ class FontGame(commands.Cog):
     lyricbackupdir = '../lyrics/'
     tweetdir = '../tweets.csv'
 
-    percent = len(os.listdir(lyricdir)) // 10
+    percent = len(os.listdir(lyricbackupdir)) // 10
     percent = percent if percent > 1 else 1
     
     type = 'lyrics' #can hold value 'tweets' or 'lyrics'
@@ -73,6 +73,13 @@ class FontGame(commands.Cog):
         return file
 
     def rand_lyric(self):
+        if len(os.listdir(self.lyricdir)) < self.percent: # don't go all the way to 0 in case there's some really long songs
+            for file in os.listdir(self.lyricbackupdir):
+                backupfile = open(self.lyricbackupdir+file, 'r')
+                copyfile = open(self.lyricdir+file, 'w')
+                if file != '.DS_Store':
+                    copyfile.write(backupfile.read())
+
         filename = self.get_file_with_extension(self.lyricdir, ['txt'])
         text = ''
         with open(self.lyricdir+filename, 'r') as f:
@@ -91,12 +98,6 @@ class FontGame(commands.Cog):
             f.write('\n\n'.join(verses))
         if len(verses) == 1:
             os.remove(self.lyricdir+filename)
-        if len(os.listdir(self.lyricdir)) < self.percent: # don't go all the way to 0 in case there's some really long songs
-            for file in os.listdir(self.lyricbackupdir):
-                backupfile = open(self.lyricbackupdir+file, 'r')
-                copyfile = open(self.lyricdir+file, 'w')
-                if file != '.DS_Store':
-                    copyfile.write(backupfile.read())
 
         return lyric_t
 
@@ -209,7 +210,7 @@ class FontGame(commands.Cog):
         except OSError:
             await ctx.send('error reading file %s' % fontpath)
             return 
-        
+
         font = ImageFont.truetype(fontpath, fontsize)
         bkg_color = self.rand_colors()
         font_color = "#ffffff"

@@ -89,4 +89,8 @@ async def debug(ctx, *, strCode : str):
 async def on_message_edit(before, after):
     await bot.invoke(await bot.get_context(after))
 
+@bot.event
+async def on_message(m):
+    await bot.invoke(await bot.get_context(m))
+
 bot.run(TOKEN)
