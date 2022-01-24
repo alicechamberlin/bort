@@ -179,5 +179,13 @@ class Fun(commands.Cog):
     async def raccoon(self, ctx):
         await ctx.send('https://raw.githubusercontent.com/datitran/raccoon_dataset/master/images/raccoon-{}.jpg'.format(random.randint(1,200)))
 
+    @commands.Cog.listener()
+    async def on_message(self, m):
+        if 'forgor' in m.content:
+            await m.add_reaction('\U0001F480')
+
+        await self.bot.invoke(await self.bot.get_context(m))
+
+
 def setup(bot):
     bot.add_cog(Fun(bot))
