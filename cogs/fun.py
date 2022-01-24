@@ -184,8 +184,5 @@ class Fun(commands.Cog):
         if 'forgor' in m.content:
             await m.add_reaction('\U0001F480')
 
-        await self.bot.invoke(await self.bot.get_context(m))
-
-
 def setup(bot):
     bot.add_cog(Fun(bot))
