@@ -7,11 +7,15 @@ import random
 
 class Economy(commands.Cog):
 
+    keys = {}
+    with open('config/keys.json','r') as f:
+        keys = json.load(f)
+
     def __init__(self, bot):
         self.bot = bot
 
     async def post_coins(self, name, id, dcoins, dxp, level):
-        params = {"name":name,"apiKey":"e9c36cf3828611d5975aa77f8d10871b","dcoins":dcoins,"dxp":dxp,"level":level}
+        params = {"name":name,"apiKey":self.keys['economy'],"dcoins":dcoins,"dxp":dxp,"level":level}
 
         data = parse.urlencode(params).encode()
         url = 'http://jennythepython.pythonanywhere.com/playerCoins/'+str(id)
@@ -46,7 +50,7 @@ class Economy(commands.Cog):
         exp += amount
         while exp > self.next_exp(level):
             level += 1
-            congratsRequest = requests.get("https://api.giphy.com/v1/gifs/search?q=bunny&api_key=INJuIdbai3pyu6J4Kk0HFikfDanmbZMM&limit=100").json()["data"]
+            congratsRequest = requests.get("https://api.giphy.com/v1/gifs/search?q=bunny&api_key="+self.keys['giphy']+"&limit=100").json()["data"]
             congratsLinkObject = congratsRequest[int(random.random() * len(congratsRequest))]
             congratsLink = congratsLinkObject["images"]["fixed_height"]["url"]
             congratsLink = congratsLink.replace("\\/", "/")

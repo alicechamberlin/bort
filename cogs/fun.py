@@ -7,16 +7,9 @@ import json
 
 class Fun(commands.Cog):
 
-    config = {}
-    with open('config/config.json','r') as f:
-        config = json.load(f)
-
     keys = {}
     with open('config/keys.json','r') as f:
         keys = json.load(f)
-
-    OWNER_ID = config["ownerId"]
-    TOKEN = config["token"]
 
     def __init__(self, bot):
             self.bot = bot
@@ -183,8 +176,6 @@ class Fun(commands.Cog):
     async def on_message(self, m):
         if 'forgor' in m.content:
             await m.add_reaction('\U0001F480')
-
-        # await self.bot.invoke(await self.bot.get_context(m))
 
 def setup(bot):
     bot.add_cog(Fun(bot))
